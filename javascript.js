@@ -5,6 +5,8 @@
 ========== */
 
 (function(){
+  console.log('hi')
+  
   const ps = {
     cssId: 'wm-before-after-slider',
     cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.001/styles.css'
@@ -320,6 +322,7 @@
 
   els.forEach(el => {
     if (el.dataset.before) {
+      console.log('build')
       new buildFromTargets(el);
     } else {
       new buildFromStackedBlocks(el);
