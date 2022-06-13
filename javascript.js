@@ -325,4 +325,4 @@
       new buildFromStackedBlocks(el);
     }
   })
-}())
+}());
