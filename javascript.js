@@ -7,7 +7,7 @@
 (function(){
   const ps = {
     cssId: 'wm-before-after-slider',
-    cssFile: 'https://assets.codepen.io/3198845/WMBeforeAfterTESTING.css'
+    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.001/styles.css'
   };
 
   let wmBeforeAfter = (function(){
