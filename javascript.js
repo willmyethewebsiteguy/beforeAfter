@@ -5,11 +5,9 @@
 ========== */
 
 (function(){
-  console.log('hi')
-  
   const ps = {
     cssId: 'wm-before-after-slider',
-    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.001/styles.css'
+    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.003/styles.css'
   };
 
   let wmBeforeAfter = (function(){
