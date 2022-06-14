@@ -12,8 +12,12 @@
   
   --divider-thickness: 2px;
   --divider-color: white;
+  
   --handle-size: 50px;
-  --handle-color: white;
+  --handle-thickness: 2px;
+  --handle-color: black;
+  --handle-border-color: white;
+  --handle-background: hsla(0, 0%, 0%, 0);
   
   --caption-offset: 17px;
   --caption-font-size: .9rem;
@@ -79,7 +83,7 @@
   width: calc(var(--slider-position) + (var(--divider-thickness) / 2));
   height: 100%;
   overflow: hidden;
-  background: blue;
+  background: white;
   z-index: 1;
   object-fit:cover;
   user-select:none;
@@ -94,6 +98,7 @@
   max-width: unset;
 }
 
+/*Captions*/
 .wm-before-after-slider .before-title {
   opacity: calc(var(--slider-position));
 }
@@ -140,6 +145,8 @@
   background-color: var(--caption-before-background);
   opacity: 70%
 }
+
+/*Divider & Handle*/
 .wm-before-after-slider .divider {
   position: absolute;
   top:0;
@@ -165,18 +172,19 @@
   display: block;
   position: absolute;
   box-sizing: border-box;
+  background:var(--handle-background);
   top: 50%;
   left: calc(var(--slider-position) - ((var(--handle-size) - var(--divider-thickness)) / 2));
   transform: translateY(-50%);
   height: var(--handle-size);
   width: var(--handle-size);
-  border: var(--divider-thickness) solid var(--handle-color);
+  border: var(--divider-thickness) solid var(--handle-border-color);
   border-radius: 50%;
   padding:calc(var(--handle-size) / 5);
 }
 .handle path {
   stroke: var(--handle-color);
-  stroke-width: calc( 2.5 * var(--divider-thickness));
+  stroke-width: calc( 2.5 * var(--handle-thickness));
 }
 body:not(.sqs-edit-mode-active) .hide-block {
   display:none;
