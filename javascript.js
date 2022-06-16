@@ -1,5 +1,5 @@
 /* ==========
-  Version TESTING
+  Version 1.1
   Before After Slider in Squarespace
   Copyright Will Myers
 ========== */
@@ -7,7 +7,7 @@
 (function(){
   const ps = {
     cssId: 'wm-before-after-slider',
-    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.004/styles.css'
+    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.005/styles.css'
   };
 
   let wmBeforeAfter = (function(){
