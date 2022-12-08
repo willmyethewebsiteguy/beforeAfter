@@ -5,11 +5,13 @@
 ========== */
 
 (function(){
+  /*Variables*/
   const ps = {
     cssId: 'wm-before-after-slider',
-    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1.006/styles.css'
+    cssFile: 'https://cdn.jsdelivr.net/gh/willmyethewebsiteguy/beforeAfter@1.1/styles.css'
   };
 
+  /*Functions*/
   let wmBeforeAfter = (function(){
 
     function createResizeEventListener(instance) {
@@ -43,7 +45,7 @@
             dividerWidth = settings.dividerWidth,
             posX = (e.clientX || e.touches[0].clientX) - imgLeft,
             percent = posX / settings.width;
-        
+
         if (percent >= 1) { percent = 1}
         if (percent <= 0) {percent = 0}
 
@@ -70,9 +72,9 @@
         settings.lock = false;
       })
     }
-    
+
     function Constructor(el) {
-     
+
       this.addCSS();
       this.settings = {
         lock:false,
@@ -110,20 +112,13 @@
 
       // Breakdown when in Edit Mode
     }
-    
-    /**
-     * Destroy this instance
-     */
-    Constructor.prototype.destroy = function (instance) {
-      //Deconstruct the Tabs Element
-      /*function removeElements() {
-        if (!instance._elements) { return }
-        instance.settings.container.innerHTML = null;
-      }
 
-      removeElements();*/
+    /**
+       * Destroy this instance
+       */
+    Constructor.prototype.destroy = function (instance) {
     };
-    
+
     /* Add CSS */
     Constructor.prototype.addCSS = function () {
       let cssFile = document.querySelector(`#${ps.cssId}-css`);
@@ -159,6 +154,7 @@
     return Constructor
   }());
 
+  /*Build the HTML Structure*/
   let buildFromTargets = (function(){
     let isValidHttpUrl = (string) => {
       let url;
@@ -217,21 +213,25 @@
 
           if (isValidHttpUrl(string)) { imgSrc = string; }
           if (document.querySelector(this.data.before)) {
-            let beforeEl = document.querySelector(this.data.before);
-            imgSrc = beforeEl.querySelector('img').dataset.src
+            let beforeEl = document.querySelector(this.data.before),
+                img = beforeEl.querySelector('img');
+            imgSrc = img.dataset.src;
+            if (!imgSrc) imgSrc = img.src;
             beforeEl.classList.add('hide-block');
             beforeEl.closest('.fe-block')?.classList.add('hide-block');
           }
           return imgSrc
         },
         get afterImg() {
-          let string = this.data.after,
-              imgSrc;
+          let string = this.data.after, imgSrc;
 
           if (isValidHttpUrl(string)) { imgSrc = string; }
           if (document.querySelector(this.data.after)) {
-            let afterEl = document.querySelector(this.data.after);
-            imgSrc = afterEl.querySelector('img').dataset.src;
+
+            let afterEl = document.querySelector(this.data.after),
+                img = afterEl.querySelector('img');
+            imgSrc = img.dataset.src;
+            if (!imgSrc) imgSrc = img.src;
             afterEl.classList.add('hide-block');
             afterEl.closest('.fe-block')?.classList.add('hide-block');
           }
@@ -246,7 +246,7 @@
 
     return Constructor;
   }());
-
+  
   let buildFromStackedBlocks = (function(){
 
     let injectTemplate = (instance) => {
@@ -276,6 +276,8 @@
   </div>`;
 
       container.innerHTML = template;
+
+      let before = instance.settings.getValue('--before-text');
       return template;
     }
 
@@ -286,14 +288,12 @@
         getValue: function(property, backup) {
           let styles = window.getComputedStyle(this.container),
               value = styles.getPropertyValue(property) || backup;
-          
-          console.log(value);
           return value
         },
         get beforeImg() {
           let beforeBlock = el.closest('.sqs-block').previousSibling.previousSibling,
               imgSrc = beforeBlock.querySelector('img').dataset.src;
-          
+
           beforeBlock.classList.add('hide-block');
 
           return imgSrc
@@ -301,9 +301,9 @@
         get afterImg() {
           let afterBlock = el.closest('.sqs-block').previousSibling,
               imgSrc = afterBlock.querySelector('img').dataset.src;
-          
+
           afterBlock.classList.add('hide-block');
-          
+
           return imgSrc
         }
       }
@@ -313,17 +313,18 @@
       new wmBeforeAfter(this.settings.container);
     }
 
-      return Constructor;
-    }());
-  
+    return Constructor;
+}());
+
+  /*Event Listeners & Init*/
   let els = document.querySelectorAll('[data-wm-plugin="before-after-slider"]:not(.loaded)');
 
   els.forEach(el => {
     if (el.dataset.before) {
-      console.log('build')
       new buildFromTargets(el);
     } else {
       new buildFromStackedBlocks(el);
     }
-  })
+  });
+
 }());
