@@ -22,9 +22,17 @@
       window.addEventListener('resize', handleEvent)
     }
     function createLoadEventListener(instance) {
+      let startingPos = parseFloat(instance.settings.startingPos);
+      if (startingPos > 1) startingPos = 0.9;
+      if (startingPos < 0) startingPos = 0.1;
+      if (!isNumber(startingPos)) startingPos = 0.5;
+
+      function isNumber(value) {
+        return typeof value === 'number' && !isNaN(value);
+      }
       function handleEvent() {
         instance.settings.size = instance.settings.container.clientWidth;
-        instance.settings.position = 0.5;
+        instance.settings.position = startingPos;
       }
 
       window.addEventListener('DOMContentLoaded', handleEvent)
@@ -37,6 +45,10 @@
     }
     function createSlideEvent(instance) {
       let settings = instance.settings;
+      let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+      settings.lock = true;
+      let mouseDown = false;
+      
       function handleEvent(e){
         if (settings.lock) return;
         if (e.target.closest('.caption')) return;
@@ -46,40 +58,67 @@
             posX = (e.clientX || e.touches[0].clientX) - imgLeft,
             percent = posX / settings.width;
 
-        if (percent >= 1) { percent = 1}
+        if (percent >= 1) {percent = 1}
         if (percent <= 0) {percent = 0}
 
         settings.position = percent;
       }
 
-      settings.container.addEventListener('mousemove', handleEvent);
-      settings.container.addEventListener('touchmove', handleEvent);
-      settings.container.addEventListener('mousedown', function(e) {
-        settings.lock = false;
-        handleEvent(e);
+      //Disable Unlock on Hover 
+      
+      settings.container.addEventListener('mouseenter', function(){
+        if (!settings.disableHoverSlide) {
+          settings.lock = false;
+        }
       })
+
+      //Touch
       settings.container.addEventListener('touchstart', function(e) {
         settings.lock = false;
+        mouseDown = true;
         handleEvent(e);
       })
-      settings.container.addEventListener('mouseup', function(e) {
-        settings.lock = true;
-      })
+      settings.container.addEventListener('touchmove', handleEvent);
       settings.container.addEventListener('touchend', function(e) {
         settings.lock = true;
+        mouseDown = false;
+      })
+
+      //Mouse
+      settings.container.addEventListener('mousedown', function(e) {
+        settings.lock = false;
+        mouseDown = true;
+        handleEvent(e);
+      })
+      settings.container.addEventListener('mousemove', handleEvent);
+      settings.container.addEventListener('mouseup', function(e) {
+        settings.lock = true;
+        mouseDown = false;
       })
       settings.container.addEventListener('mouseleave', function() {
-        settings.lock = false;
+        if (!mouseDown) settings.lock = true;
       })
     }
 
-    function Constructor(el) {
+    function getProperty(el, property, backup){
+      let styles = window.getComputedStyle(el),
+          value = styles.getPropertyValue(property) || backup;
 
+      if (value === 'true') value = true;
+      if (value === 'false') value = false;
+      
+      return value;
+    }
+
+    function Constructor(el) {
+      let self = this;
       this.addCSS();
       this.settings = {
         lock:false,
         container: el,
         width: 500,
+        disableHoverSlide: getProperty(el, '--disable-hover', false),
+        startingPos: getProperty(el, '--starting-position', 0.5),
         get handle() {
           return this.container.querySelector('.handle');
         },
@@ -278,6 +317,7 @@
       container.innerHTML = template;
 
       let before = instance.settings.getValue('--before-text');
+
       return template;
     }
 
