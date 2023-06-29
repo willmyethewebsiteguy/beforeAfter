@@ -8,6 +8,7 @@
   --aspect-ratio: 1 / 1;
   --border-thickness: 2px;
   --border-color: white;
+  --border-radius: 0px;
   --shadow: none;
   
   --divider-thickness: 2px;
@@ -54,6 +55,8 @@
   border: var(--border-thickness) solid var(--border-color);
   box-shadow: var(--shadow);
   z-index:1;
+  overflow:hidden;
+  border-radius: var(--border-radius, 0px);
 }
 .wm-before-after-slider *{
   box-sizing: border-box;
@@ -189,4 +192,30 @@
 }
 body:not(.sqs-edit-mode-active) .hide-block {
   display:none;
+}
+
+.sqs-edit-mode-active [data-wm-plugin="before-after-slider"]{
+  color: var(--headingLargeColor, white);
+  border-bottom: 2px dashed;
+  padding: 0px;
+}
+.sqs-edit-mode-active [data-wm-plugin="before-after-slider"]:after{
+  content: 'Before After Slider Code';
+  background-color: var(--siteBackgroundColor, black);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  padding: 2px 5px;
+}
+.sqs-edit-mode-active .sqs-block:hover [data-wm-plugin="before-after-slider"]:after{
+  opacity: 1;
+  visibility: visible;
 }
