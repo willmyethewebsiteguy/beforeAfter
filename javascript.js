@@ -356,15 +356,23 @@
     return Constructor;
 }());
 
+
+  const init = () => {
+    let els = document.querySelectorAll('[data-wm-plugin="before-after-slider"]:not(.loaded)');
+
+    els.forEach(el => {
+      if (el.dataset.before) {
+        new buildFromTargets(el);
+      } else {
+        new buildFromStackedBlocks(el);
+      }
+    });
+  };
+
+  init();
+
   /*Event Listeners & Init*/
-  let els = document.querySelectorAll('[data-wm-plugin="before-after-slider"]:not(.loaded)');
-
-  els.forEach(el => {
-    if (el.dataset.before) {
-      new buildFromTargets(el);
-    } else {
-      new buildFromStackedBlocks(el);
-    }
-  });
-
+  window.wmBeforeAfter = {
+    init: () => init(),
+  };
 }());
